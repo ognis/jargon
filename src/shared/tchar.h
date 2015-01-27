@@ -183,7 +183,7 @@ typedef std::string tstring;
 #define STRDUP_AtoA(x) strdup(x)
 #ifndef JARGON_ASCII_MODE
 #  define string_duplicate(x) tcsdup(x)
-#  define STRDUP_WtoW jargon_wcsdup
+#  define STRDUP_WtoW wcsdup
 #  define STRDUP_TtoT STRDUP_WtoW
 #  define STRDUP_WtoT STRDUP_WtoW
 #  define STRDUP_TtoW STRDUP_WtoW

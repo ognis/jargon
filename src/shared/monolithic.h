@@ -3,3 +3,4 @@
  */
 #include "common.h"
 #include "wchar.h"
+#include "../debug/error.h"

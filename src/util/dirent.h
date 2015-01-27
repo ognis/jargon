@@ -19,7 +19,7 @@ typedef int* tintptr_t;
 #    include <sys/uio.h>
 typedef struct _finddata_t {
   char* name;
-} _finddeta_t;
+} _finddata_t;
 #  else
 #    include <sys/io.h>
 #  endif

@@ -28,8 +28,8 @@ class Comparable : public NamedObject {
   virtual int32_t compare_to(NamedObject* object) = 0;
 };
 
-/* Equators is responsible for evaluate equality. */
-class Equator {
+/* Equalables is responsible for evaluate equality. */
+class Equalable {
  public:
   class Char : public std::binary_function<const char*, const char*, bool> {
    public:
@@ -63,8 +63,8 @@ class Equator {
   };
 };
 
-/* Comparators is responsible for evaluate inequality. */
-class Comparator {
+/* Ordered class is responsible for evaluate inequality. */
+class Ordered {
  public:
   class Base {
    public:
@@ -72,8 +72,7 @@ class Comparator {
       bucket_size = 4,
       min_buckets = 8
     };
-    Base() {
-    }
+    Base() {}
   };
 
   class Int32 : public Base, public Comparable {
@@ -151,109 +150,112 @@ class Comparator {
 
 int32_t compare(Comparable* left, Comparable* right);
 
-class AbstractDeletor {
+class AbstractDeleter {
  public:
-  virtual void delete(void*) = 0;
-  virtual ~AbstractDeletor();
+  virtual void do_delete(void*) = 0;
+  virtual ~AbstractDeleter();
 };
 
 /* Deletros is responsible for deleting object arrays. */
-class Deletor {
+class Freeable {
  public:
-  class TCharArray : public AbstractDeletor {
+  class TCharArray : public AbstractDeleter {
    public:
-    void delete(void* array) {
-      exec((tchar_t*)array);
+    void do_delete(void* array) {
+      do_deletion_of((tchar_t*)array);
     }
-    static void exec(tchar_t* array) {
+    static void do_deletion_of(tchar_t* array) {
       JARGON_FREE(array);
     }
   };
 
   template<typename Type>
-  class ValueArray : public AbstractDeletor {
+  class ValueArray : public AbstractDeleter {
    public:
-    void delete(void* array) {
-      exec((Type*)array);
+    void do_delete(void* array) {
+      do_deletion_of((Type*)array);
     }
-    static void exec(Type* array) {
+    static void do_deletion_of(Type* array) {
       JARGON_FREE(array);
     }
   };
 
   template<typename Class>
-  class ObjectArray : public AbstractDeletor {
+  class ObjectArray : public AbstractDeleter {
    public:
-    void delete(void* array) {
-      exec((Class*)array);
+    void do_delete(void* array) {
+      do_deletion_of((Class*)array);
     }
-    static void exec(Class* array) {
+    static void do_deletion_of(Class* array) {
       JARGON_DEL_ARRAY(array);
     }
   };
 
-  class CharArray : public AbstractDeletor {
+  class CharArray : public AbstractDeleter {
    public:
-    void delete(void* array) {
-      exec((char*)array);
+    void do_delete(void* array) {
+      do_deletion_of((char*)array);
     }
-    static void exec(char* array) {
+    static void do_deletion_of(char* array) {
       JARGON_FREE(array);
     }
   };
 
   template<typename Class>
-  class Object : public AbstractDeletor {
+  class Object : public AbstractDeleter {
    public:
-    void delete(void* object){
-      exec((Class*)object);
+    void do_delete(void* object){
+      do_deletion_of((Class*)object);
     }
-    static void exec(Class* obj){
-      JARGON_FREE(obj);
-    }
-  };
-
-  template<typename Class>
-  class Void : public AbstractDeletor {
-   public:
-    void delete(void* object){
-      exec((Class*)object);
-    }
-    static void exec(Class* object){
+    static void do_deletion_of(Class* object){
       JARGON_FREE(object);
     }
   };
 
-  class Dummy: public AbstractDeletor {
+  template<typename Class>
+  class Void : public AbstractDeleter {
    public:
-    void delete(void*) {}
-    static void exec(const void*) {}
+    void do_delete(void* object){
+      do_deletion_of((Class*)object);
+    }
+    static void do_deletion_of(Class* object){
+      JARGON_FREE(object);
+    }
   };
 
-  class DummyInt32 : public AbstractDeletor {
+  /* This class is used for implementing templatized classes. */
+  class Dummy: public AbstractDeleter {
    public:
-    void delete(void*) {}
-    static void exec(const int32_t) {}
+    void do_delete(void*) {}
+    static void do_deletion_of(const void*) {}
   };
 
-  class DummyFloat : public AbstractDeletor {
+  /* This class is used for implementing templatized classes. */
+  class DummyInt32 : public AbstractDeleter {
    public:
-    void delete(void*) {}
-    static void exec(const float_t) {}
+    void do_delete(void*) {}
+    static void do_deletion_of(const int32_t) {}
+  };
+
+  /* This class is used for implementing templatized classes. */
+  class DummyFloat : public AbstractDeleter {
+   public:
+    void do_delete(void*) {}
+    static void do_deletion_of(const float_t) {}
   };
 
   template <typename Type>
-  class ConstNullValue : public AbstractDeletor {
+  class ConstNullValue : public AbstractDeleter {
    public:
-    void delete(void*) {}
-    static void exec(const Type) {}
+    void do_delete(void*) {}
+    static void do_deletion_of(const Type) {}
   };
 
   template <typename Type>
-  class NullValue : public AbstractDeletor {
+  class NullValue : public AbstractDeleter {
    public:
-    void delete(void*) {}
-    static void exec(Type) {}
+    void do_delete(void*) {}
+    static void do_deletion_of(Type) {}
   };
 };
 

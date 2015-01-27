@@ -71,6 +71,8 @@ tchar_t* _i64tot(int64_t value, tchar_t* str, int radix);
 /* Duplicates given string. */
 #if !defined(JARGON_HAVE_WCSDUP_F)
 wchar_t* _wcsdup(const wchar_t* value);
+#  undef wcsdup
+#  define wcsdup JARGON_NAMESPACE(shared)::_wcsdup
 #endif
 
 /* Converts string to int64. */

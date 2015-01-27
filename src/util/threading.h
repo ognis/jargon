@@ -4,6 +4,7 @@
 #ifndef jargon_util_threading_h
 #define jargon_util_threading_h
 
+#include "object.h"
 #include "../shared/monolithic.h"
 
 /* Defines platform-specific mutex. */
@@ -35,7 +36,7 @@
 JARGON_NAMESPACE_BEGIN(util)
 
 /* Class to compare thread ids. */
-class ThreadIdCompare;
+class ThreadIdComparator;
 
 /* Defines platform-specific mutext handlers. */
 #if defined(JARGON_DISABLE_MULTITHREADING)
@@ -206,6 +207,33 @@ class MutexGuard {
 #  define CONDITION_WAIT(mutex, condition) condition.wait(&mutex)
 #  define CONDITION_NOTIFY_ALL(condition) condition.notify_all()
 #endif
+
+/* Class holds context which is shared with relating threads. */
+class ThreadLocalHandler {
+ public:
+  typedef void Callback(bool startup);
+  static void remove(ThreadLocalHandler* local);
+  static void unregister();
+  static void shutdown();
+  void* get();
+  void set(void* local);
+  void set_null();
+  ThreadLocalHandler(JARGON_NAMESPACE(util)::AbstractDeleter*);
+  virtual ~ThreadLocalHandler();
+ private:
+  class Internal;
+  Internal* internal;
+};
+
+/* Templatized thread specific data holder. */
+template<typename Type, typename Deleter>
+class ThreadLocal : public ThreadLocalHandler {
+ public:
+  ThreadLocal() : ThreadLocalHandler(new Deleter) {}
+  virtual ~ThreadLocal() {}
+  Type get() {return (Type) ThreadLocalHandler::get();}
+  void set(Type local) {ThreadLocalHandler::set((Type) local);}
+};
 
 JARGON_NAMESPACE_END
 

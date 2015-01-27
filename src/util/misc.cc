@@ -27,7 +27,7 @@
 #  include <strings.h>
 #endif
 
-x#ifdef JARGON_HAVE_UNISTD_H
+#ifdef JARGON_HAVE_UNISTD_H
 #  include <unistd.h>
 #endif
 

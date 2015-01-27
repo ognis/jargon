@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
   std::wcin.imbue(ctype_default);
 
   {
-    const tchar_t* text = TLITERAL("あいうえお");
+    const tchar_t* text = TLITERAL("enter thred one context.");
     JARGON_THREAD_ID_T thread = JARGON_THREAD_CREATE(threading, (void*)text);
     SCOPED_LOCK_MUTEX(mutex_one);
     CONDITION_WAIT(mutex_one, condition_one);
@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
   }
 
   {
-    const tchar_t* text = TLITERAL("かきくけこ");
+    const tchar_t* text = TLITERAL("enter thread two context.");
     JARGON_THREAD_ID_T thread = JARGON_THREAD_CREATE(threading, (void*)text);
     SCOPED_LOCK_MUTEX(mutex_one);
     CONDITION_WAIT(mutex_one, condition_one);

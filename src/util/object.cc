@@ -20,12 +20,12 @@ bool NamedObject::instance_of(const char* name) const {
 }
 
 /* Returns true if two values are supposed to be equal. */
-bool Equator::Int32::operator()(const int32_t left, const int32_t right) const {
+bool Equalable::Int32::operator()(const int32_t left, const int32_t right) const {
   return left == right;
 }
 
 /* Returns true if two values are supposed to be equal. */
-bool Equator::Char::operator()(const char* left, const char* right) const {
+bool Equalable::Char::operator()(const char* left, const char* right) const {
   if (left == right) {
     return true;
   }
@@ -34,7 +34,7 @@ bool Equator::Char::operator()(const char* left, const char* right) const {
 
 #ifndef JARGON_ASCII_MODE
 /* Returns true if two values are supposed to be equal. */
-bool Equator::WChar::operator()(const wchar_t* left, const wchar_t* right) const {
+bool Equalable::WChar::operator()(const wchar_t* left, const wchar_t* right) const {
   if (left == right) {
     return true;
   }
@@ -43,7 +43,7 @@ bool Equator::WChar::operator()(const wchar_t* left, const wchar_t* right) const
 #endif
 
 /* Deconstructor. */
-AbstractDeletor::~AbstractDeletor() {}
+AbstractDeleter::~AbstractDeleter() {}
 
 /* Compares two objects. */
 int32_t compare(Comparable* left, Comparable* right) {
@@ -59,32 +59,32 @@ int32_t compare(Comparable* left, Comparable* right) {
 }
 
 /* Constructor. */
-Comparator::Int32::Int32() {
+Ordered::Int32::Int32() {
   this->value = 0;
 }
 
 /* Constructor. */
-Comparator::Int32::Int32(int32_t value) {
+Ordered::Int32::Int32(int32_t value) {
   this->value = value;
 }
 
 /* Returns assigned value. */
-int32_t Comparator::Int32::get_value() const {
+int32_t Ordered::Int32::get_value() const {
   return this->value;
 }
 
 /* Returns class name. */
-const char* Comparator::Int32::get_class_name() {
-  return "Comparator::Int32::get_class_name";
+const char* Ordered::Int32::get_class_name() {
+  return "Ordered::Int32::get_class_name";
 }
 
 /* Returns name. */
-const char* Comparator::Int32::get_name() const {
+const char* Ordered::Int32::get_name() const {
   return get_class_name();
 }
 
 /* Compares to object. */
-int32_t Comparator::Int32::compare_to(NamedObject* object) {
+int32_t Ordered::Int32::compare_to(NamedObject* object) {
   if (object->get_name() != Int32::get_class_name()) {
     return -1;
   }
@@ -98,36 +98,36 @@ int32_t Comparator::Int32::compare_to(NamedObject* object) {
 }
 
 /* Compares two objects. */
-bool Comparator::Int32::operator()(int32_t left, int32_t right) const {
+bool Ordered::Int32::operator()(int32_t left, int32_t right) const {
   return left > right ? true : false;
 }
 
-size_t Comparator::Int32::operator()(int32_t value) const {
+size_t Ordered::Int32::operator()(int32_t value) const {
 	return value;
 }
 
 /* Constructor. */
-Comparator::Float::Float(float_t value) {
+Ordered::Float::Float(float_t value) {
   this->value = value;
 }
 
 /* Returns assigned value. */
-float_t Comparator::Float::get_value() const {
+float_t Ordered::Float::get_value() const {
   return this->value;
 }
 
 /* Returns class name. */
-const char* Comparator::Float::get_class_name() {
-  return "Comparator::Float::get_class_name";
+const char* Ordered::Float::get_class_name() {
+  return "Ordered::Float::get_class_name";
 }
 
 /* Returns class name. */
-const char* Comparator::Float::get_name() const {
+const char* Ordered::Float::get_name() const {
   return get_class_name();
 }
 
 /* Compares to object. */
-int32_t Comparator::Float::compare_to(NamedObject* object) {
+int32_t Ordered::Float::compare_to(NamedObject* object) {
   if (object->get_name() != Float::get_class_name()) {
     return -1;
   }
@@ -141,32 +141,32 @@ int32_t Comparator::Float::compare_to(NamedObject* object) {
 }
 
 /* Construcotr. */
-Comparator::Char::Char() {
+Ordered::Char::Char() {
   this->value = NULL;
 }
 
 /* Construcotr. */
-Comparator::Char::Char(const char* value) {
+Ordered::Char::Char(const char* value) {
   this->value = value;
 }
 
 /* Returns assigned value. */
-const char* Comparator::Char::get_value() const {
+const char* Ordered::Char::get_value() const {
   return this->value;
 }
 
 /* Returns class name. */
-const char* Comparator::Char::get_class_name() {
-  return "Comparator::Char::get_class_name";
+const char* Ordered::Char::get_class_name() {
+  return "Ordered::Char::get_class_name";
 }
 
 /* Returns class name. */
-const char* Comparator::Char::get_name() const{
+const char* Ordered::Char::get_name() const{
   return get_class_name();
 }
 
 /* Compares to object. */
-int32_t Comparator::Char::compare_to(NamedObject* object) {
+int32_t Ordered::Char::compare_to(NamedObject* object) {
   if (object->get_name() != Char::get_class_name()) {
     return -1;
   }
@@ -175,54 +175,54 @@ int32_t Comparator::Char::compare_to(NamedObject* object) {
 }
 
 /* Compares two objects. */
-bool Comparator::Char::operator()(const char* left, const char* right) const {
+bool Ordered::Char::operator()(const char* left, const char* right) const {
   if (left == right) {
     return false;
   }
   return (strcmp(left, right) < 0);
 }
 
-size_t Comparator::Char::operator()(const char* value) const {
-  return JARGON_NAMESPACE(util)::misc::a_hash_code(value);
+size_t Ordered::Char::operator()(const char* value) const {
+  return JARGON_NAMESPACE(util)::misc::c_hash_code(value);
 }
 
 #ifndef JARGON_ASCII_MODE
 /* Constructor. */
-Comparator::WChar::WChar() {
+Ordered::WChar::WChar() {
   this->value = NULL;
 }
 
 /* Constructor. */
-Comparator::WChar::WChar(const wchar_t* value) {
+Ordered::WChar::WChar(const wchar_t* value) {
   this->value = value;
 }
 
 /* Returns assigned value. */
-const wchar_t* Comparator::WChar::get_value() const {
+const wchar_t* Ordered::WChar::get_value() const {
   return this->value;
 }
 
 /* Returns class name. */
-const char* Comparator::WChar::get_class_name() {
-  return "Comparator::WChar::get_class_name";
+const char* Ordered::WChar::get_class_name() {
+  return "Ordered::WChar::get_class_name";
 }
 
 /* Returns name. */
-const char* Comparator::WChar::get_name() const {
+const char* Ordered::WChar::get_name() const {
   return get_class_name();
 }
 
 /* Compares to object. */
-int32_t Comparator::WChar::compare_to(NamedObject* object) {
+int32_t Ordered::WChar::compare_to(NamedObject* object) {
   if (object->get_name() != WChar::get_class_name()) {
     return -1;
   }
-  tchar_t* other = (TChar*)object;
+  TChar* other = (TChar*)object;
   return tcscmp(this->value, other->value);
 }
 
 /* Compares two objects. */
-bool Comparator::WChar::operator()(const wchar_t* left, const wchar_t* right) const {
+bool Ordered::WChar::operator()(const wchar_t* left, const wchar_t* right) const {
   if (left == right) {
     return false;
   }
@@ -230,7 +230,7 @@ bool Comparator::WChar::operator()(const wchar_t* left, const wchar_t* right) co
   return result;
 }
 
-size_t Comparator::WChar::operator()( const wchar_t* value) const {
+size_t Ordered::WChar::operator()(const wchar_t* value) const {
   return JARGON_NAMESPACE(util)::misc::w_hash_code(value);
 }
 #endif /* JARGON_ASCII_MODE */

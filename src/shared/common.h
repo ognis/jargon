@@ -31,6 +31,11 @@
 #  define JARGON_NAMESPACE2(sub, sub2)
 #endif
 
+#define JARGON_MIN(a,b) ((a)>(b) ? (b) : (a))
+#define JARGON_MIN3(a,b,c) ((a)<(b) ? ((a)<(c) ? (a) : (c)) : ((b)<(c) ? (b) : (c)))
+#define JARGON_MAX(a,b) ((a)>(b) ? (a): (b))
+#define JARGON_MAX3(a,b,c) ((a)>(b) ? ((a)>(c) ? (a) : (c)) : ((b)>(c) ? (b) : (c)))
+
 /* Macro for validating conditions. */
 #ifndef JARGON_PRECOND
 #  include <assert.h>
